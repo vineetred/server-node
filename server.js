@@ -38,6 +38,7 @@ app.use((req, res, next) => {
 app.use(express.static(__dirname + '/public'));
 
 
+//My routes
 
 app.get('/', (req, res)=> {
     res.render('home.hbs', {
@@ -51,6 +52,10 @@ app.get('/about',(req, res)=> {
         pageTitle: 'About Page',
     });
 });
+
+app.get('/projects',(req, res) => {
+    res.render('projects.hbs');
+})
 
 app.get('/bad', (req, res)=> {
     res.send({
