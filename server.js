@@ -1,11 +1,19 @@
+//Requiring modules
 const express = require('express');
 const hbs = require('hbs');
 const fs = require('fs');
 var app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000; //SET DEFAULT TO 3000
 
+//Setting HBS as the engine
+app.set('view engine', 'hbs');
+//The directory /public is automatically visible
+app.use(express.static(__dirname + '/public'));
+
+//Partials under /views/partials
 hbs.registerPartials(__dirname + '/views/partials');
 
+//A helper for the footer
 hbs.registerHelper('getCurrentYear', () => {
     return new Date().getFullYear();
 })
@@ -13,15 +21,7 @@ hbs.registerHelper('getCurrentYear', () => {
 hbs.registerHelper('screamIt', (text) => {
     return text.toUpperCase();
 })
-
-
-app.set('view engine', 'hbs');
-
-
-var text = {
-    name: 'Vineet',
-    likes: 'Biking',
-};
+//This is a middleware that runs the server log
 app.use((req, res, next) => {
     var now = new Date().toString();
     var log = `${now} ${req.method} ${req.url}`;
@@ -29,13 +29,13 @@ app.use((req, res, next) => {
     fs.appendFileSync('server.log',log + '\n');
     next();
 })
-//MAINTANANCE
+
+//MAINTANANCE -----> ONLY UNCOMMENT IF MAINTAININCE MODE IS REQUIRED!
 // app.use((req, res, next) => {
 //     res.render('maintanance.hbs');
 // })
 
 
-app.use(express.static(__dirname + '/public'));
 
 
 //My routes
@@ -59,6 +59,7 @@ app.get('/projects',(req, res) => {
     });
 })
 
+//404 Route
 app.get('/bad', (req, res)=> {
     res.send({
         errorMessage: 'Unable to handle request',
